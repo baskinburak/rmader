@@ -8,6 +8,9 @@
 
 #pragma once
 
+
+#include <splines/curves/SingleParameterPiecewiseCurve.h>
+
 #include <iostream>
 #include <iomanip>  // std::setprecision
 #include <deque>
@@ -528,21 +531,6 @@ struct PieceWisePol
 
 struct dynTraj
 {
-  std::vector<std::string> function;
-  Eigen::Vector3d bbox;
-  int id;
-  double time_received;  // time at which this trajectory was received from an agent
-  double time_created;   // for delay check
-  // double time_sent;      // to measure comm delay (not much different from time_created)
-  bool is_agent;  // true for a trajectory of an agent, false for an obstacle
-  mt::PieceWisePol pwp;
-  bool is_committed;
-  int traj_id;
-};
-
-struct dynTrajCompiled
-{
-  std::vector<exprtk::expression<double>> function;
   Eigen::Vector3d bbox;
   int id;
   double time_received;  // time at which this trajectory was received from an agent
@@ -553,6 +541,24 @@ struct dynTrajCompiled
   bool is_committed;
   mt::PieceWisePol pwp;
   int traj_id;
+  std::shared_ptr<splines::SingleParameterPiecewiseCurve<double, 3U>> traj;
+  double alpha;
+};
+
+struct dynTrajCompiled
+{
+  Eigen::Vector3d bbox;
+  int id;
+  double time_received;  // time at which this trajectory was received from an agent
+  double time_created;   // for delay check
+  // double time_sent;      // to measure comm delay (not much different from time_created)
+  bool is_agent;  // true for a trajectory of an agent, false for an obstacle
+  bool is_static;
+  bool is_committed;
+  mt::PieceWisePol pwp;
+  int traj_id;
+  std::shared_ptr<splines::SingleParameterPiecewiseCurve<double, 3U>> traj;
+  double alpha;
 };
 
 // struct mt::PieceWisePolWithInfo
